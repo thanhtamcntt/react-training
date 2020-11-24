@@ -1,0 +1,21 @@
+.list-menu {
+  list-style-type: none;
+  background-color: rosybrown;
+}
+.list-menu li {
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+} 
+.list-menu li a {
+  color: #f1f1f1;
+}
+.card-body {
+  border: 2px solid red;
+  box-shadow: 20px 30px #f1f1f1;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 20px;
+}

@@ -19,3 +19,12 @@
   margin-bottom: 15px;
   padding: 20px;
 }
+.list-contact {
+  list-style-type: none;
+}
+.list-contact li {
+  border: 2px solid green;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 20px;
+}

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import Home from "./components/Home";
 import About from "./components/About";
 import Topics from "./components/Topics";
+import Contact from "./components/Contact";
 import Register from "./components/Register";
 import Login from "./components/Login";
  
@@ -27,6 +28,9 @@ class App extends React.Component {
               <Link to="/topics">Topics</Link>
             </li>
             <li>
+              <Link to="/contact">Contact</Link>
+            </li>
+            <li>
               <Link to="/register">Register</Link>
             </li>
             <li>
@@ -39,6 +43,7 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route path="/about" component={About} />
             <Route path="/topics" component={Topics} />
+            <Route path="/contact" component={Contact} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
           </div>

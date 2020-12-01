@@ -1,99 +1,57 @@
-import React from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { setUserSession } from '../Utils/Common';
 
-class Login extends React.Component {
+function Login(props) {
+  const [loading, setLoading] = useState(false);
+  const email = useFormInput('');
+  const password = useFormInput('');
+  const [error, setError] = useState(null);
 
-    constructor(props) {
-        super(props);
-        //Khởi tạo state chứa giá trị của input
-        this.state = {
-            email: "",
-            password: ""
-        };
-    }
+  // handle button click of login form
+  const handleLogin = () => {
+    setError(null);
+    setLoading(true);
+    axios.post('https://api-com-kanri.dev.kod-hc.info/login', { email: email.value, password: password.value }).then(response => {
+      setLoading(false);
+      setUserSession(response.data.token, response.data.user);
+      props.history.push('/dashboard');
+    }).catch(error => {
+      setLoading(false);
+      if (error.response.status === 401) setError(error.response.data.message);
+      else setError("Something went wrong. Please try again later.");
+    });
+  }
 
-    changeInputValue(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
+  return (
+    <div>
+      <h1>
+        Login<br /><br />
+      </h1>
+      <div>
+        Email<br />
+        <input type="text" {...email} autoComplete="new-password" />
+      </div>
+      <div style={{ marginTop: 10 }}>
+        Password<br />
+        <input type="password" {...password} autoComplete="new-password" />
+      </div>
+      {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
+      <input className="btn btn-primary" type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} /><br />
+    </div>
+  );
+}
 
-    validationForm() {
-        let returnData = {
-            error: false,
-            msg: ''
-        }
-        const { email, password } = this.state
-        //Kiểm tra email
-        const re = /\S+@\S+\.\S+/;
-        if (!re.test(email)) {
-            returnData = {
-                error: true,
-                msg: 'Không đúng định dạng email'
-            }
-        }
-        //Kiểm tra password
-        if (password.length < 8) {
-            returnData = {
-                error: true,
-                msg: 'Mật khẩu phải lớn hơn 8 ký tự'
-            }
-        }
-        return returnData;
-    }
+const useFormInput = initialValue => {
+  const [value, setValue] = useState(initialValue);
 
-    submitForm(e) {
-        //Chặn các event mặc định của form
-        e.preventDefault();
-     
-       //Gọi hàm validationForm() dùng để kiểm tra form
-        const validation = this.validationForm()
-     
-        //Kiểm tra lỗi của input trong form và hiển thị
-        if (validation.error) {
-          alert(validation.msg)
-        }else{
-          alert('Submit form success')
-        }
-      }
-
-    render() {
-        return (
-            <div>
-                <h1>Login</h1>
-                <div className="container" style={{ paddingTop: "5%" }}>
-                    <form
-                        onSubmit={e => {
-                            this.submitForm(e);
-                        }}
-                    >
-                        <div className="form-group">
-                            <label htmlFor="text">Email:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="email"
-                                placeholder="Enter email"
-                                onChange={e => this.changeInputValue(e)}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="pwd">Password:</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                name="password"
-                                placeholder="Enter password"
-                                onChange={e => this.changeInputValue(e)}
-                            />
-                        </div>
-                        <button type="submit" className="btn btn-primary">
-                            Submit
-                        </button>
-                    </form>
-                </div>
-            </div>
-        );
-    }
+  const handleChange = e => {
+    setValue(e.target.value);
+  }
+  return {
+    value,
+    onChange: handleChange
+  }
 }
 
 export default Login;
